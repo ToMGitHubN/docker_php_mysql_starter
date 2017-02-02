@@ -1,0 +1,27 @@
+version: '2'
+services:
+
+  mysql:
+    image: mysql:latest
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pw
+      MYSQL_DATABASE: mysql_database
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_pw
+    ports:
+      - "3306:3306"
+    container_name: mysql
+
+  php:
+    build: ./docker_setting/php
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    volumes:
+      - ./project_name:/usr/share/php/html
+      - ./docker_setting/php/php.ini:/usr/local/etc/php/php.ini
+    working_dir: /usr/share/php/html
+    command: php -S 0.0.0.0:80
+    container_name: php
