@@ -20,8 +20,9 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ./project_name:/usr/share/php/html
+      - ./project_name:/var/www/html
       - ./docker_setting/php/php.ini:/usr/local/etc/php/php.ini
-    working_dir: /usr/share/php/html
-    command: php -S 0.0.0.0:80
+      - ./docker_setting/000-default.conf:/etc/apache2/conf-enabled/000-default.conf
+    working_dir: /var/www/html
+    tty: true
     container_name: php
