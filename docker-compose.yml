@@ -22,7 +22,7 @@ services:
     volumes:
       - ./project_name:/var/www/html
       - ./docker_setting/php/php.ini:/usr/local/etc/php/php.ini
-      - ./docker_setting/000-default.conf:/etc/apache2/conf-enabled/000-default.conf
+      - ./docker_setting/php/000-default.conf:/etc/apache2/conf-enabled/000-default.conf
     working_dir: /var/www/html
     tty: true
     container_name: php
