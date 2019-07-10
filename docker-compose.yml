@@ -1,28 +1,66 @@
-version: '2'
+version: '3'
 services:
 
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
     environment:
-      MYSQL_ROOT_PASSWORD: root_pw
+      MYSQL_ROOT_PASSWORD: mysql_root_password
       MYSQL_DATABASE: mysql_database
       MYSQL_USER: mysql_user
-      MYSQL_PASSWORD: mysql_pw
+      MYSQL_PASSWORD: mysql_user_password
     ports:
-      - "3306:3306"
-    container_name: mysql
+      - 3306:3306
+    container_name: project_name_mysql
 
-  php:
-    build: ./docker_setting/php
-    ports:
-      - "80:80"
-    depends_on:
-      - mysql
+#  test_mysql:
+#      image: mysql:5.7
+#      command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+#      environment:
+#        MYSQL_USER: test_mysql_user
+#        MYSQL_PASSWORD: test_mysql_user_password
+#        MYSQL_DATABASE: test_mysql_database
+#        MYSQL_ROOT_PASSWORD: test_mysql_root_password
+#      container_name: project_name_test_mysql
+
+  web:
+    build: ./docker_setting/php-apache
     volumes:
       - ./project_name:/var/www/html
-      - ./docker_setting/php/php.ini:/usr/local/etc/php/php.ini
-      - ./docker_setting/php/000-default.conf:/etc/apache2/conf-enabled/000-default.conf
-    working_dir: /var/www/html
-    tty: true
-    container_name: php
+    ports:
+      - 80:80
+    depends_on:
+      - mysql
+ #     - test_mysql
+ #   environment:
+ #     TEST_DB_HOST: test_mysql
+ #     TEST_DB_PORT: 3306
+ #     TEST_DB_DATABASE: test_mysql_database
+ #     TEST_DB_USERNAME: test_mysql_user
+ #     TEST_DB_PASSWORD: test_mysql_user_password
+    container_name: project_name_php
+
+#  web:
+#      build: ./docker_setting/php-fpm
+#      volumes:
+#        - ./project_name:/var/www/html
+#      depends_on:
+#        - mysql
+#        - test_mysql
+#      environment:
+#        TEST_DB_HOST: test_mysql
+#        TEST_DB_PORT: 3306
+#        TEST_DB_DATABASE: test_mysql_database
+#        TEST_DB_USERNAME: test_mysql_user
+#        TEST_DB_PASSWORD: test_mysql_user_password
+#      container_name: project_name_php
+#
+#  nginx:
+#    build: ./docker_setting/nginx
+#    ports:
+#      - 80:80
+#    volumes:
+#      - ./project_name:/var/www/html
+#    depends_on:
+#      - web
+#    container_name: project_name_nginx
