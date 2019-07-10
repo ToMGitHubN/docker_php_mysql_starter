@@ -21,7 +21,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 #    && sed -i -e '$a <Location />\nAuthType Basic\nAuthName "Basic Auth"\nAuthUserFile /var/www/html/.htpasswd\nRequire valid-user\n</Location>' /etc/apache2/apache2.conf
 
 
-# LANGUAGE ja_JP.UTF-8
+# LANGUAGE "ja_JP.UTF-8"
 RUN apt-get install -y locales \
 	&& apt-get clean \
 	&& locale-gen ja_JP.UTF-8 \
@@ -29,6 +29,9 @@ RUN apt-get install -y locales \
 ENV LANG ja_JP.UTF-8
 ENV LANGUAGE ja_JP:jp
 ENV LC_ALL ja_JP.UTF-8
+
+# TIME ZONE "Asia/Tokyo"
+ENV TZ=Asia/Tokyo
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php \
